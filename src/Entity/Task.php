@@ -12,6 +12,8 @@ use App\Repository\TaskRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\Valid;
 
 #[ORM\Entity(repositoryClass: TaskRepository::class)]
 #[ApiResource(
@@ -27,7 +29,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
     ],
     denormalizationContext: [       // Données persistées lors de la requête
         'groups' => ['write:collection']
-    ]
+    ],
+    validationContext: ['groups']
 
 )]
 class Task
@@ -40,14 +43,16 @@ class Task
 
     #[ORM\Column(length: 2000)]
     #[Groups(['read:collection', 'write:collection','read:item'])]
+    #[Length(min: 8)]
     private ?string $content = null;
 
     #[ORM\Column]
     #[Groups(['write:collection','read:item'])]
     private ?bool $status = null;
 
-    #[ORM\ManyToOne(inversedBy: 'task')]
+    #[ORM\ManyToOne(cascade: ['persist'], inversedBy: 'task')]
     #[Groups(['write:collection','read:item'])]
+    #[Valid()]
     private ?Category $category = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
