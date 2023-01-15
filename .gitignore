@@ -9,3 +9,4 @@
 ###< symfony/framework-bundle ###
 composer.lock
 symfony.lock
+.idea
