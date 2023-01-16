@@ -10,3 +10,4 @@
 composer.lock
 symfony.lock
 .idea
+.idea/*

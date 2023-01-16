@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
@@ -22,7 +24,11 @@ use Symfony\Component\Validator\Constraints\Valid;
         new GetCollection(),
         new Post(),
         new Put(),
-        new Delete(denormalizationContext: ['groups' => ['read:item']])
+        new Delete(denormalizationContext: ['groups' => ['read:item']]),
+        'customOp' => [
+            'method' => 'POST',
+            'path' => '/custom'
+        ]
     ],
     normalizationContext: [     // Données récupérées lors de la réponse
         'groups' => ['read:collection']
@@ -30,9 +36,11 @@ use Symfony\Component\Validator\Constraints\Valid;
     denormalizationContext: [       // Données persistées lors de la requête
         'groups' => ['write:collection']
     ],
-    validationContext: ['groups']
+    validationContext: ['groups' => ['write:collection']],
+    paginationItemsPerPage: 5,
 
 )]
+#[ApiFilter(SearchFilter::class, properties: ['id' => 'exact', 'content' => 'partial'])]
 class Task
 {
     #[ORM\Id]
@@ -43,7 +51,7 @@ class Task
 
     #[ORM\Column(length: 2000)]
     #[Groups(['read:collection', 'write:collection','read:item'])]
-    #[Length(min: 8)]
+    #[Length(min: 8, groups: ['write:collection'])]
     private ?string $content = null;
 
     #[ORM\Column]
