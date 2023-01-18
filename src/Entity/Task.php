@@ -10,6 +10,7 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use App\Controller\TestController;
 use App\Repository\TaskRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -25,10 +26,13 @@ use Symfony\Component\Validator\Constraints\Valid;
         new Post(),
         new Put(),
         new Delete(denormalizationContext: ['groups' => ['read:item']]),
-        'customOp' => [
-            'method' => 'POST',
-            'path' => '/custom'
-        ]
+        new Get(
+            uriTemplate: '/custom/{id}',
+            controller: TestController::class,
+            openapiContext: [
+                'summary' => 'Récupère une task custom'
+            ]
+        ),
     ],
     normalizationContext: [     // Données récupérées lors de la réponse
         'groups' => ['read:collection']
