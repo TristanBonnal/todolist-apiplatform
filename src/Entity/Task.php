@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
@@ -30,15 +31,20 @@ use Symfony\Component\Validator\Constraints\Valid;
             uriTemplate: '/custom/{id}',
             controller: TestController::class,
             openapiContext: [
-                'summary' => 'Récupère une task custom'
-            ]
+                'summary' => 'Récupère une task custom',
+                'description' => 'Une description de la requête de qualité'
+            ],
+            paginationEnabled: false,
+            filters: []
         ),
     ],
     normalizationContext: [     // Données récupérées lors de la réponse
-        'groups' => ['read:collection']
+        'groups' => ['read:collection'],
+        'openapi_definition_name' => 'Collection'
     ],
     denormalizationContext: [       // Données persistées lors de la requête
-        'groups' => ['write:collection']
+        'groups' => ['write:collection'],
+        'openapi_definition_name' => 'Collection-write'
     ],
     validationContext: ['groups' => ['write:collection']],
     paginationItemsPerPage: 5,
@@ -60,6 +66,7 @@ class Task
 
     #[ORM\Column]
     #[Groups(['write:collection','read:item'])]
+    #[ApiProperty(openapiContext: ['description' => 'Tâche en cours (0) ou complétée (1)'])]
     private ?bool $status = null;
 
     #[ORM\ManyToOne(cascade: ['persist'], inversedBy: 'task')]

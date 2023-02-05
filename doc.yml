@@ -1,0 +1,830 @@
+openapi: 3.0.0
+info:
+  title: ''
+  description: ''
+  version: 0.0.0
+servers:
+  -
+    url: /
+    description: ''
+paths:
+  /api/categories:
+    get:
+      operationId: api_categories_get_collection
+      tags:
+        - Category
+      responses:
+        200:
+          description: 'Category collection'
+          content:
+            application/ld+json:
+              schema:
+                type: object
+                properties:
+                  'hydra:member': { type: array, items: { $ref: '#/components/schemas/Category.jsonld' } }
+                  'hydra:totalItems': { type: integer, minimum: 0 }
+                  'hydra:view': { type: object, properties: { '@id': { type: string, format: iri-reference }, '@type': { type: string }, 'hydra:first': { type: string, format: iri-reference }, 'hydra:last': { type: string, format: iri-reference }, 'hydra:previous': { type: string, format: iri-reference }, 'hydra:next': { type: string, format: iri-reference } }, example: { '@id': string, type: string, 'hydra:first': string, 'hydra:last': string, 'hydra:previous': string, 'hydra:next': string } }
+                  'hydra:search': { type: object, properties: { '@type': { type: string }, 'hydra:template': { type: string }, 'hydra:variableRepresentation': { type: string }, 'hydra:mapping': { type: array, items: { type: object, properties: { '@type': { type: string }, variable: { type: string }, property: { type: string, nullable: true }, required: { type: boolean } } } } } }
+                required:
+                  - 'hydra:member'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Category'
+            text/html:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Category'
+      summary: 'Retrieves the collection of Category resources.'
+      description: 'Retrieves the collection of Category resources.'
+      parameters:
+        -
+          name: page
+          in: query
+          description: 'The collection page number'
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: integer
+            default: 1
+          style: form
+          explode: false
+          allowReserved: false
+      deprecated: false
+    post:
+      operationId: api_categories_post
+      tags:
+        - Category
+      responses:
+        201:
+          description: 'Category resource created'
+          content:
+            application/ld+json:
+              schema:
+                $ref: '#/components/schemas/Category.jsonld'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+            text/html:
+              schema:
+                $ref: '#/components/schemas/Category'
+          links: {  }
+        400:
+          description: 'Invalid input'
+        422:
+          description: 'Unprocessable entity'
+      summary: 'Creates a Category resource.'
+      description: 'Creates a Category resource.'
+      parameters: []
+      requestBody:
+        description: 'The new Category resource'
+        content:
+          application/ld+json:
+            schema:
+              $ref: '#/components/schemas/Category.jsonld'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Category'
+          text/html:
+            schema:
+              $ref: '#/components/schemas/Category'
+        required: true
+      deprecated: false
+    parameters: []
+  '/api/categories/{id}':
+    get:
+      operationId: api_categories_id_get
+      tags:
+        - Category
+      responses:
+        200:
+          description: 'Category resource'
+          content:
+            application/ld+json:
+              schema:
+                $ref: '#/components/schemas/Category.jsonld'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+            text/html:
+              schema:
+                $ref: '#/components/schemas/Category'
+        404:
+          description: 'Resource not found'
+      summary: 'Retrieves a Category resource.'
+      description: 'Retrieves a Category resource.'
+      parameters:
+        -
+          name: id
+          in: path
+          description: 'Category identifier'
+          required: true
+          deprecated: false
+          allowEmptyValue: false
+          schema:
+            type: string
+          style: simple
+          explode: false
+          allowReserved: false
+      deprecated: false
+    put:
+      operationId: api_categories_id_put
+      tags:
+        - Category
+      responses:
+        200:
+          description: 'Category resource updated'
+          content:
+            application/ld+json:
+              schema:
+                $ref: '#/components/schemas/Category.jsonld'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+            text/html:
+              schema:
+                $ref: '#/components/schemas/Category'
+          links: {  }
+        400:
+          description: 'Invalid input'
+        422:
+          description: 'Unprocessable entity'
+        404:
+          description: 'Resource not found'
+      summary: 'Replaces the Category resource.'
+      description: 'Replaces the Category resource.'
+      parameters:
+        -
+          name: id
+          in: path
+          description: 'Category identifier'
+          required: true
+          deprecated: false
+          allowEmptyValue: false
+          schema:
+            type: string
+          style: simple
+          explode: false
+          allowReserved: false
+      requestBody:
+        description: 'The updated Category resource'
+        content:
+          application/ld+json:
+            schema:
+              $ref: '#/components/schemas/Category.jsonld'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Category'
+          text/html:
+            schema:
+              $ref: '#/components/schemas/Category'
+        required: true
+      deprecated: false
+    delete:
+      operationId: api_categories_id_delete
+      tags:
+        - Category
+      responses:
+        204:
+          description: 'Category resource deleted'
+        404:
+          description: 'Resource not found'
+      summary: 'Removes the Category resource.'
+      description: 'Removes the Category resource.'
+      parameters:
+        -
+          name: id
+          in: path
+          description: 'Category identifier'
+          required: true
+          deprecated: false
+          allowEmptyValue: false
+          schema:
+            type: string
+          style: simple
+          explode: false
+          allowReserved: false
+      deprecated: false
+    patch:
+      operationId: api_categories_id_patch
+      tags:
+        - Category
+      responses:
+        200:
+          description: 'Category resource updated'
+          content:
+            application/ld+json:
+              schema:
+                $ref: '#/components/schemas/Category.jsonld'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+            text/html:
+              schema:
+                $ref: '#/components/schemas/Category'
+          links: {  }
+        400:
+          description: 'Invalid input'
+        422:
+          description: 'Unprocessable entity'
+        404:
+          description: 'Resource not found'
+      summary: 'Updates the Category resource.'
+      description: 'Updates the Category resource.'
+      parameters:
+        -
+          name: id
+          in: path
+          description: 'Category identifier'
+          required: true
+          deprecated: false
+          allowEmptyValue: false
+          schema:
+            type: string
+          style: simple
+          explode: false
+          allowReserved: false
+      requestBody:
+        description: 'The updated Category resource'
+        content:
+          application/merge-patch+json:
+            schema:
+              $ref: '#/components/schemas/Category'
+        required: true
+      deprecated: false
+    parameters: []
+  '/api/custom/{id}':
+    get:
+      operationId: api_custom_id_get
+      tags:
+        - Task
+      responses:
+        200:
+          description: 'Task resource'
+          content:
+            application/ld+json:
+              schema:
+                $ref: '#/components/schemas/Task.jsonld-read.collection'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task-read.collection'
+            text/html:
+              schema:
+                $ref: '#/components/schemas/Task-read.collection'
+        404:
+          description: 'Resource not found'
+      summary: 'Récupère une task custom'
+      description: 'Retrieves a Task resource.'
+      parameters:
+        -
+          name: id
+          in: path
+          description: 'Task identifier'
+          required: true
+          deprecated: false
+          allowEmptyValue: false
+          schema:
+            type: string
+          style: simple
+          explode: false
+          allowReserved: false
+      deprecated: false
+    parameters: []
+  /api/tasks:
+    get:
+      operationId: api_tasks_get_collection
+      tags:
+        - Task
+      responses:
+        200:
+          description: 'Task collection'
+          content:
+            application/ld+json:
+              schema:
+                type: object
+                properties:
+                  'hydra:member': { type: array, items: { $ref: '#/components/schemas/Task.jsonld-read.collection' } }
+                  'hydra:totalItems': { type: integer, minimum: 0 }
+                  'hydra:view': { type: object, properties: { '@id': { type: string, format: iri-reference }, '@type': { type: string }, 'hydra:first': { type: string, format: iri-reference }, 'hydra:last': { type: string, format: iri-reference }, 'hydra:previous': { type: string, format: iri-reference }, 'hydra:next': { type: string, format: iri-reference } }, example: { '@id': string, type: string, 'hydra:first': string, 'hydra:last': string, 'hydra:previous': string, 'hydra:next': string } }
+                  'hydra:search': { type: object, properties: { '@type': { type: string }, 'hydra:template': { type: string }, 'hydra:variableRepresentation': { type: string }, 'hydra:mapping': { type: array, items: { type: object, properties: { '@type': { type: string }, variable: { type: string }, property: { type: string, nullable: true }, required: { type: boolean } } } } } }
+                required:
+                  - 'hydra:member'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Task-read.collection'
+            text/html:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Task-read.collection'
+      summary: 'Retrieves the collection of Task resources.'
+      description: 'Retrieves the collection of Task resources.'
+      parameters:
+        -
+          name: page
+          in: query
+          description: 'The collection page number'
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: integer
+            default: 1
+          style: form
+          explode: false
+          allowReserved: false
+        -
+          name: id
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: integer
+          style: form
+          explode: false
+          allowReserved: false
+        -
+          name: 'id[]'
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: array
+            items:
+              type: integer
+          style: form
+          explode: true
+          allowReserved: false
+        -
+          name: content
+          in: query
+          description: ''
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          schema:
+            type: string
+          style: form
+          explode: false
+          allowReserved: false
+      deprecated: false
+    post:
+      operationId: api_tasks_post
+      tags:
+        - Task
+      responses:
+        201:
+          description: 'Task resource created'
+          content:
+            application/ld+json:
+              schema:
+                $ref: '#/components/schemas/Task.jsonld-read.collection'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task-read.collection'
+            text/html:
+              schema:
+                $ref: '#/components/schemas/Task-read.collection'
+          links: {  }
+        400:
+          description: 'Invalid input'
+        422:
+          description: 'Unprocessable entity'
+      summary: 'Creates a Task resource.'
+      description: 'Creates a Task resource.'
+      parameters: []
+      requestBody:
+        description: 'The new Task resource'
+        content:
+          application/ld+json:
+            schema:
+              $ref: '#/components/schemas/Task.jsonld-write.collection'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Task-write.collection'
+          text/html:
+            schema:
+              $ref: '#/components/schemas/Task-write.collection'
+        required: true
+      deprecated: false
+    parameters: []
+  '/api/tasks/{id}':
+    get:
+      operationId: api_tasks_id_get
+      tags:
+        - Task
+      responses:
+        200:
+          description: 'Task resource'
+          content:
+            application/ld+json:
+              schema:
+                $ref: '#/components/schemas/Task.jsonld-read.item'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task-read.item'
+            text/html:
+              schema:
+                $ref: '#/components/schemas/Task-read.item'
+        404:
+          description: 'Resource not found'
+      summary: 'Retrieves a Task resource.'
+      description: 'Retrieves a Task resource.'
+      parameters:
+        -
+          name: id
+          in: path
+          description: 'Task identifier'
+          required: true
+          deprecated: false
+          allowEmptyValue: false
+          schema:
+            type: string
+          style: simple
+          explode: false
+          allowReserved: false
+      deprecated: false
+    put:
+      operationId: api_tasks_id_put
+      tags:
+        - Task
+      responses:
+        200:
+          description: 'Task resource updated'
+          content:
+            application/ld+json:
+              schema:
+                $ref: '#/components/schemas/Task.jsonld-read.collection'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task-read.collection'
+            text/html:
+              schema:
+                $ref: '#/components/schemas/Task-read.collection'
+          links: {  }
+        400:
+          description: 'Invalid input'
+        422:
+          description: 'Unprocessable entity'
+        404:
+          description: 'Resource not found'
+      summary: 'Replaces the Task resource.'
+      description: 'Replaces the Task resource.'
+      parameters:
+        -
+          name: id
+          in: path
+          description: 'Task identifier'
+          required: true
+          deprecated: false
+          allowEmptyValue: false
+          schema:
+            type: string
+          style: simple
+          explode: false
+          allowReserved: false
+      requestBody:
+        description: 'The updated Task resource'
+        content:
+          application/ld+json:
+            schema:
+              $ref: '#/components/schemas/Task.jsonld-write.collection'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Task-write.collection'
+          text/html:
+            schema:
+              $ref: '#/components/schemas/Task-write.collection'
+        required: true
+      deprecated: false
+    delete:
+      operationId: api_tasks_id_delete
+      tags:
+        - Task
+      responses:
+        204:
+          description: 'Task resource deleted'
+        404:
+          description: 'Resource not found'
+      summary: 'Removes the Task resource.'
+      description: 'Removes the Task resource.'
+      parameters:
+        -
+          name: id
+          in: path
+          description: 'Task identifier'
+          required: true
+          deprecated: false
+          allowEmptyValue: false
+          schema:
+            type: string
+          style: simple
+          explode: false
+          allowReserved: false
+      deprecated: false
+    parameters: []
+components:
+  schemas:
+    Category:
+      type: object
+      description: ''
+      deprecated: false
+      properties:
+        id:
+          readOnly: true
+          type: integer
+        name:
+          minLength: 3
+          type: string
+        task:
+          type: array
+          items:
+            type: string
+            format: iri-reference
+    Category-read.item:
+      type: object
+      description: ''
+      deprecated: false
+      properties:
+        name:
+          minLength: 3
+          type: string
+    Category-write.collection:
+      type: object
+      description: ''
+      deprecated: false
+      properties:
+        name:
+          minLength: 3
+          type: string
+    Category.jsonld:
+      type: object
+      description: ''
+      deprecated: false
+      properties:
+        '@context':
+          readOnly: true
+          oneOf:
+            -
+              type: string
+            -
+              type: object
+              properties:
+                '@vocab':
+                  type: string
+                hydra:
+                  type: string
+                  enum: ['http://www.w3.org/ns/hydra/core#']
+              required:
+                - '@vocab'
+                - hydra
+              additionalProperties: true
+        '@id':
+          readOnly: true
+          type: string
+        '@type':
+          readOnly: true
+          type: string
+        id:
+          readOnly: true
+          type: integer
+        name:
+          minLength: 3
+          type: string
+        task:
+          type: array
+          items:
+            type: string
+            format: iri-reference
+    Category.jsonld-read.item:
+      type: object
+      description: ''
+      deprecated: false
+      properties:
+        '@context':
+          readOnly: true
+          oneOf:
+            -
+              type: string
+            -
+              type: object
+              properties:
+                '@vocab':
+                  type: string
+                hydra:
+                  type: string
+                  enum: ['http://www.w3.org/ns/hydra/core#']
+              required:
+                - '@vocab'
+                - hydra
+              additionalProperties: true
+        '@id':
+          readOnly: true
+          type: string
+        '@type':
+          readOnly: true
+          type: string
+        name:
+          minLength: 3
+          type: string
+    Category.jsonld-write.collection:
+      type: object
+      description: ''
+      deprecated: false
+      properties:
+        '@context':
+          readOnly: true
+          oneOf:
+            -
+              type: string
+            -
+              type: object
+              properties:
+                '@vocab':
+                  type: string
+                hydra:
+                  type: string
+                  enum: ['http://www.w3.org/ns/hydra/core#']
+              required:
+                - '@vocab'
+                - hydra
+              additionalProperties: true
+        '@id':
+          readOnly: true
+          type: string
+        '@type':
+          readOnly: true
+          type: string
+        name:
+          minLength: 3
+          type: string
+    Task-read.collection:
+      type: object
+      description: ''
+      deprecated: false
+      properties:
+        id:
+          readOnly: true
+          type: integer
+        content:
+          minLength: 8
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+    Task-read.item:
+      type: object
+      description: ''
+      deprecated: false
+      properties:
+        id:
+          readOnly: true
+          type: integer
+        content:
+          minLength: 8
+          type: string
+        status:
+          type: boolean
+        category:
+          anyOf:
+            -
+              $ref: '#/components/schemas/Category-read.item'
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+    Task-write.collection:
+      type: object
+      description: ''
+      deprecated: false
+      properties:
+        content:
+          minLength: 8
+          type: string
+        status:
+          type: boolean
+        category:
+          anyOf:
+            -
+              $ref: '#/components/schemas/Category-write.collection'
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+    Task.jsonld-read.collection:
+      type: object
+      description: ''
+      deprecated: false
+      properties:
+        '@context':
+          readOnly: true
+          oneOf:
+            -
+              type: string
+            -
+              type: object
+              properties:
+                '@vocab':
+                  type: string
+                hydra:
+                  type: string
+                  enum: ['http://www.w3.org/ns/hydra/core#']
+              required:
+                - '@vocab'
+                - hydra
+              additionalProperties: true
+        '@id':
+          readOnly: true
+          type: string
+        '@type':
+          readOnly: true
+          type: string
+        id:
+          readOnly: true
+          type: integer
+        content:
+          minLength: 8
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+    Task.jsonld-read.item:
+      type: object
+      description: ''
+      deprecated: false
+      properties:
+        '@context':
+          readOnly: true
+          oneOf:
+            -
+              type: string
+            -
+              type: object
+              properties:
+                '@vocab':
+                  type: string
+                hydra:
+                  type: string
+                  enum: ['http://www.w3.org/ns/hydra/core#']
+              required:
+                - '@vocab'
+                - hydra
+              additionalProperties: true
+        '@id':
+          readOnly: true
+          type: string
+        '@type':
+          readOnly: true
+          type: string
+        id:
+          readOnly: true
+          type: integer
+        content:
+          minLength: 8
+          type: string
+        status:
+          type: boolean
+        category:
+          anyOf:
+            -
+              $ref: '#/components/schemas/Category.jsonld-read.item'
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+    Task.jsonld-write.collection:
+      type: object
+      description: ''
+      deprecated: false
+      properties:
+        content:
+          minLength: 8
+          type: string
+        status:
+          type: boolean
+        category:
+          anyOf:
+            -
+              $ref: '#/components/schemas/Category.jsonld-write.collection'
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+  responses: {  }
+  parameters: {  }
+  examples: {  }
+  requestBodies: {  }
+  headers: {  }
+  securitySchemes: {  }
+security: []
+tags: []
+
