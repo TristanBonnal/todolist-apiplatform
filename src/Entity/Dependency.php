@@ -6,11 +6,12 @@ use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use App\State\DependencyStateProvider;
 
 #[ApiResource(
     operations: [
-        new Get(),
-        new GetCollection()
+        new Get(provider: DependencyStateProvider::class),
+        new GetCollection(provider: DependencyStateProvider::class)
     ],
     paginationEnabled: false
 )]
