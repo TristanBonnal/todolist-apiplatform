@@ -49,6 +49,6 @@ class DependencyRepository
     {
         $composerEntries = json_decode(file_get_contents($this->rootPath), true);
         $composerEntries['require'][$dependency->getName()] = $dependency->getVersion();
-        file_put_contents($this->rootPath, json_encode($composerEntries));
+        file_put_contents($this->rootPath, json_encode($composerEntries, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
     }
 }

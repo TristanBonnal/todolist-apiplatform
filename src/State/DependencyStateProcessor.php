@@ -14,6 +14,8 @@ class DependencyStateProcessor implements ProcessorInterface
     }
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): void
     {
+        // Pour gérer PUT ou DELETE, on pourrait vérifier l'opération et agir en conséquence
+
         $this->dependencyRepository->persist(
             new Dependency(
                 $data->getName(),

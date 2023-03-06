@@ -7,9 +7,11 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
 use App\State\DependencyStateProcessor;
 use App\State\DependencyStateProvider;
 use Ramsey\Uuid\Uuid;
+use Symfony\Component\Validator\Constraints\Length;
 
 #[ApiResource(
     operations: [
@@ -38,7 +40,8 @@ use Ramsey\Uuid\Uuid;
                 ]
             ],
             processor: DependencyStateProcessor::class
-        )
+        ),
+        new Put(provider: DependencyStateProvider::class, processor: DependencyStateProcessor::class),
     ],
     paginationEnabled: false
 )]
@@ -47,7 +50,10 @@ class Dependency
     #[ApiProperty(identifier: true)]
     private $uuid;
 
-    #[ApiProperty(description: 'Le nom de la dépendance')]
+    #[
+        ApiProperty(description: 'Le nom de la dépendance'),
+        Length(min: 2)
+    ]
     private $name;
 
     #[ApiProperty(description: 'La version de la dépendance')]
