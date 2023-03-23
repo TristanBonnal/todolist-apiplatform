@@ -2,17 +2,20 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
 class SecurityController extends AbstractController
 {
-    #[Route('/api/login', name: 'api_login', methods: ['POST'])]
+    #[Route(path: '/api/login', name: 'api_login', methods: ['POST'])]
     public function login()
     {
+        // L'authentification a déjà été faite avant d'entrer dans le controller
+        /** @var User $user */
         $user = $this->getUser();
         return $this->json([
-            'username' => $user->getUsername(),
+            'email' => $user->getEmail(),
             'roles' => $user->getRoles(),
         ]);
     }

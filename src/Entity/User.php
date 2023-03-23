@@ -2,23 +2,49 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Action\NotFoundAction;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 
-#[ORM\Entity(repositoryClass: UserRepository::class)]
+#[
+    ORM\Entity(repositoryClass: UserRepository::class),
+    ApiResource(
+        operations: [
+            new GetCollection(
+                controller: NotFoundAction::class,
+                openapiContext: ['summary' => 'hidden'],
+                output: false,
+                read: false,
+            ),
+            new Get(
+                uriTemplate: '/me',
+                controller: MeController::class,
+            ),
+        ],
+        normalizationContext: ['groups' => ['read:collection:User']],
+    )
+
+]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['read:collection:User'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
+    #[Groups(['read:collection:User'])]
     private ?string $email = null;
 
     #[ORM\Column]
+    #[Groups(['read:collection:User'])]
     private array $roles = [];
 
     /**
