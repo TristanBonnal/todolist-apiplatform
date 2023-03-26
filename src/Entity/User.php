@@ -6,6 +6,7 @@ use ApiPlatform\Action\NotFoundAction;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use App\Controller\MeController;
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -16,15 +17,17 @@ use Symfony\Component\Serializer\Annotation\Groups;
     ORM\Entity(repositoryClass: UserRepository::class),
     ApiResource(
         operations: [
-            new GetCollection(
-                controller: NotFoundAction::class,
-                openapiContext: ['summary' => 'hidden'],
-                output: false,
-                read: false,
-            ),
             new Get(
                 uriTemplate: '/me',
                 controller: MeController::class,
+                openapiContext: [
+                    'security' => [
+                        [
+                            'cookieAuth' => [],
+                        ],
+                    ],
+                ],
+                security: 'is_granted("ROLE_USER")',
             ),
         ],
         normalizationContext: ['groups' => ['read:collection:User']],
