@@ -7,7 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class MeController extends AbstractController
 {
-    public function __invoke() : ?User
+    public function __invoke()
     {
         /** @var User $user */
         $user = $this->getUser();

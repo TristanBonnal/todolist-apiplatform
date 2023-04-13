@@ -21,10 +21,10 @@ class OpenApiFactory implements OpenApiFactoryInterface
         $openApi = $this->decorated->__invoke($context);
 
         $schemas = $openApi->getComponents()->getSecuritySchemes();
-        $schemas['cookieAuth'] = new \ArrayObject([
-            'type' => 'apiKey',
-            'in' => 'cookie',
-            'name' => 'PHPSESSID',
+        $schemas['bearerAuth'] = new \ArrayObject([
+            'type' => 'http',
+            'scheme' => 'bearer',
+            'bearerFormat' => 'JWT',
         ]);
 
         $openApi->getPaths()->addPath('/api/login', self::getLoginPath());
