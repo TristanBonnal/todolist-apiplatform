@@ -23,7 +23,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
                 openapiContext: [
                     'security' => [
                         [
-                            'cookieAuth' => [],
+                            'bearerAuth' => [],
                         ],
                     ],
                 ],
