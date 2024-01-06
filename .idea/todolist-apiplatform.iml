@@ -90,6 +90,8 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/brick/math" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/ramsey/uuid" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/ramsey/collection" />
+      <excludeFolder url="file://$MODULE_DIR$/public/bundles" />
+      <excludeFolder url="file://$MODULE_DIR$/var" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
