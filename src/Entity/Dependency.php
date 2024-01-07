@@ -48,16 +48,16 @@ use Symfony\Component\Validator\Constraints\Length;
 class Dependency
 {
     #[ApiProperty(identifier: true)]
-    private $uuid;
+    private string $uuid;
 
     #[
         ApiProperty(description: 'Le nom de la dépendance'),
         Length(min: 2)
     ]
-    private $name;
+    private string $name;
 
     #[ApiProperty(description: 'La version de la dépendance')]
-    private $version;
+    private string $version;
 
     public function __construct($name, $version)
     {
@@ -66,34 +66,24 @@ class Dependency
         $this->version = $version;
     }
 
-    public function getUuid()
+    public function getUuid(): string
     {
         return $this->uuid;
     }
 
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
-    public function getVersion()
+    public function getVersion(): string
     {
         return $this->version;
     }
 
-    public function setUuid($uuid)
-    {
-        $this->uuid = $uuid;
-    }
-
-    public function setName($name)
+    public function setName($name): void
     {
         $this->name = $name;
-    }
-
-    public function setVersion($version)
-    {
-        $this->version = $version;
     }
 
     public function __toString()

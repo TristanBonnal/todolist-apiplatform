@@ -13,6 +13,7 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use App\Controller\TestController;
 use App\Repository\TaskRepository;
+use App\State\TaskStateProcessor;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -24,8 +25,8 @@ use Symfony\Component\Validator\Constraints\Valid;
     operations: [       // Comportement spécifique à chaque opération
         new Get(normalizationContext: ['groups' => ['read:item']]),
         new GetCollection(),
-        new Post(),
-        new Put(),
+        new Post(security: 'is_granted("ROLE_USER")', processor: TaskStateProcessor::class),
+        new Put(security: 'is_granted("ROLE_USER")', processor: TaskStateProcessor::class),
         new Delete(denormalizationContext: ['groups' => ['read:item']]),
         new Get(
             uriTemplate: '/custom/{id}',
@@ -77,6 +78,10 @@ class Task
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     #[Groups(['write:collection','read:item', 'read:collection'])]
     private ?\DateTimeInterface $createdAt = null;
+
+    #[ORM\ManyToOne(inversedBy: 'tasks')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $user = null;
 
     public function __construct()
     {
@@ -132,6 +137,18 @@ class Task
     public function setCreatedAt(\DateTimeInterface $createdAt): self
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }

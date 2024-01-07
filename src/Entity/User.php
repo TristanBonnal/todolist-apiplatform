@@ -4,20 +4,30 @@ namespace App\Entity;
 
 use ApiPlatform\Action\NotFoundAction;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
 use App\Controller\MeController;
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use App\State\UserPasswordHasher;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints\Email;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 #[
     ORM\Entity(repositoryClass: UserRepository::class),
     ApiResource(
         operations: [
-            new Get(
+            new GetCollection(
                 uriTemplate: '/me',
                 controller: MeController::class,
                 openapiContext: [
@@ -29,25 +39,48 @@ use Symfony\Component\Serializer\Annotation\Groups;
                 ],
                 security: 'is_granted("ROLE_USER")',
             ),
+            new Post(
+                uriTemplate: '/register',
+                validationContext: ['groups' => ['Default', 'user:create']],
+                processor: UserPasswordHasher::class
+            ),
+            new Get(
+                security: 'is_granted("ROLE_ADMIN")',
+                securityPostDenormalize: 'is_granted("ROLE_ADMIN")',
+            ),
+            new GetCollection(
+                security: 'is_granted("ROLE_ADMIN")',
+                securityPostDenormalize: 'is_granted("ROLE_ADMIN")',
+            ),
+            new Put(processor: UserPasswordHasher::class),
+            new Patch(processor: UserPasswordHasher::class),
+            new Delete(),
+
         ],
-        normalizationContext: ['groups' => ['read:collection:User']],
+        normalizationContext: ['groups' => ['user:read']],
+        denormalizationContext: ['groups' => ['user:create', 'user:update']],
     )
 
 ]
+#[UniqueEntity('email')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['read:collection:User'])]
+    #[Groups(['user:read'])]
+    
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
-    #[Groups(['read:collection:User'])]
+    #[Groups(['user:read', 'user:create', 'user:update'])]
+    #[NotBlank]
+    #[Email]
     private ?string $email = null;
+    
 
     #[ORM\Column]
-    #[Groups(['read:collection:User'])]
+    #[Groups(['user:read'])]
     private array $roles = [];
 
     /**
@@ -55,6 +88,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\Column]
     private ?string $password = null;
+
+    #[NotBlank(groups: ['user:create'])]
+    #[Groups(['user:create', 'user:update'])]
+    private ?string $plainPassword = null;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Task::class, orphanRemoval: true)]
+    private Collection $tasks;
+
+    public function __construct()
+    {
+        $this->tasks = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -117,6 +162,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    public function getPlainPassword(): ?string
+    {
+        return $this->plainPassword;
+    }
+
+    public function setPlainPassword(?string $plainPassword): self
+    {
+        $this->plainPassword = $plainPassword;
+
+        return $this;
+    }
+
     /**
      * @see UserInterface
      */
@@ -124,5 +181,35 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    /**
+     * @return Collection<int, Task>
+     */
+    public function getTasks(): Collection
+    {
+        return $this->tasks;
+    }
+
+    public function addTask(Task $task): self
+    {
+        if (!$this->tasks->contains($task)) {
+            $this->tasks->add($task);
+            $task->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTask(Task $task): self
+    {
+        if ($this->tasks->removeElement($task)) {
+            // set the owning side to null (unless already changed)
+            if ($task->getUser() === $this) {
+                $task->setUser(null);
+            }
+        }
+
+        return $this;
     }
 }
