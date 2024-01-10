@@ -25,8 +25,8 @@ use Symfony\Component\Validator\Constraints\Valid;
     operations: [       // Comportement spécifique à chaque opération
         new Get(normalizationContext: ['groups' => ['read:item']]),
         new GetCollection(),
-        new Post(security: 'is_granted("ROLE_USER")', processor: TaskStateProcessor::class),
-        new Put(security: 'is_granted("ROLE_USER")', processor: TaskStateProcessor::class),
+        new Post( processor: TaskStateProcessor::class),
+        new Put( processor: TaskStateProcessor::class),
         new Delete(denormalizationContext: ['groups' => ['read:item']]),
         new Get(
             uriTemplate: '/custom/{id}',
@@ -49,6 +49,7 @@ use Symfony\Component\Validator\Constraints\Valid;
     ],
     validationContext: ['groups' => ['write:collection']],
     paginationItemsPerPage: 5,
+    security: 'is_granted("ROLE_USER")',
 
 )]
 #[ApiFilter(SearchFilter::class, properties: ['id' => 'exact', 'content' => 'partial'])]
