@@ -25,8 +25,8 @@ use Symfony\Component\Validator\Constraints\Valid;
     operations: [       // Comportement spécifique à chaque opération
         new Get(normalizationContext: ['groups' => ['read:item']]),
         new GetCollection(),
-        new Post( processor: TaskStateProcessor::class),
-        new Put( processor: TaskStateProcessor::class),
+        new Post(),
+        new Put(),
         new Delete(denormalizationContext: ['groups' => ['read:item']]),
         new Get(
             uriTemplate: '/custom/{id}',
@@ -49,7 +49,6 @@ use Symfony\Component\Validator\Constraints\Valid;
     ],
     validationContext: ['groups' => ['write:collection']],
     paginationItemsPerPage: 5,
-    security: 'is_granted("ROLE_USER")',
 
 )]
 #[ApiFilter(SearchFilter::class, properties: ['id' => 'exact', 'content' => 'partial'])]
@@ -80,9 +79,6 @@ class Task
     #[Groups(['write:collection','read:item', 'read:collection'])]
     private ?\DateTimeInterface $createdAt = null;
 
-    #[ORM\ManyToOne(inversedBy: 'tasks')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?User $user = null;
 
     public function __construct()
     {
@@ -138,18 +134,6 @@ class Task
     public function setCreatedAt(\DateTimeInterface $createdAt): self
     {
         $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
-
-    public function setUser(?User $user): self
-    {
-        $this->user = $user;
 
         return $this;
     }
