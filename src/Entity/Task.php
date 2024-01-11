@@ -66,12 +66,12 @@ class Task
     private ?string $content = null;
 
     #[ORM\Column]
-    #[Groups(['write:collection','read:item'])]
+    #[Groups(['write:collection','read:item', 'read:collection'])]
     #[ApiProperty(openapiContext: ['description' => 'Tâche en cours (0) ou complétée (1)'])]
     private ?bool $status = null;
 
-    #[ORM\ManyToOne(cascade: ['persist'], inversedBy: 'task')]
-    #[Groups(['write:collection','read:item'])]
+    #[ORM\ManyToOne(targetEntity: Category::class, inversedBy: 'tasks')]
+    #[Groups(['write:collection','read:item', 'read:collection'])]
     #[Valid()]
     private ?Category $category = null;
 

@@ -25,11 +25,11 @@ class Category
     private ?string $name = null;
 
     #[ORM\OneToMany(mappedBy: 'category', targetEntity: Task::class)]
-    private Collection $task;
+    private Collection $tasks;
 
     public function __construct()
     {
-        $this->task = new ArrayCollection();
+        $this->tasks = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -52,15 +52,15 @@ class Category
     /**
      * @return Collection<int, Task>
      */
-    public function getTask(): Collection
+    public function getTasks(): Collection
     {
-        return $this->task;
+        return $this->tasks;
     }
 
     public function addTask(Task $task): self
     {
-        if (!$this->task->contains($task)) {
-            $this->task->add($task);
+        if (!$this->tasks->contains($task)) {
+            $this->tasks->add($task);
             $task->setCategory($this);
         }
 
@@ -69,7 +69,7 @@ class Category
 
     public function removeTask(Task $task): self
     {
-        if ($this->task->removeElement($task)) {
+        if ($this->tasks->removeElement($task)) {
             // set the owning side to null (unless already changed)
             if ($task->getCategory() === $this) {
                 $task->setCategory(null);
