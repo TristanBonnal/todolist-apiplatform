@@ -79,6 +79,10 @@ class Task
     #[Groups(['write:collection','read:item', 'read:collection'])]
     private ?\DateTimeInterface $createdAt = null;
 
+    #[ORM\ManyToOne(inversedBy: 'tasks')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?TaskList $taskList = null;
+
 
     public function __construct()
     {
@@ -134,6 +138,18 @@ class Task
     public function setCreatedAt(\DateTimeInterface $createdAt): self
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getTaskList(): ?TaskList
+    {
+        return $this->taskList;
+    }
+
+    public function setTaskList(?TaskList $taskList): self
+    {
+        $this->taskList = $taskList;
 
         return $this;
     }
